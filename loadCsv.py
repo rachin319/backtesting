@@ -44,7 +44,7 @@ def loadCsv(filename, dbName, symbol, exch):
 	start = time()
 	#print u'Start'
 
-	host, port = loadMongoSetting()
+	host, port, logging = loadMongoSetting()
 	#print host, port
 
 	client = pymongo.MongoClient(host,port)
@@ -97,7 +97,7 @@ if __name__=='__main__':
 	directory=tkFileDialog.askdirectory(parent=root,title='Pick a directory')
 	filenames = getFilename(directory)
 	#print len(filenames)
-	for i in range(13, 14):
-	#for i in range(len(filenames)):
+	#for i in range(13, 14):
+	for i in range(len(filenames)):
 		coll = getCollectionName(filenames[i])
 		loadCsv(filenames[i], 'test1', coll, 'DL')

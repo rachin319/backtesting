@@ -1,0 +1,10 @@
+1¡¢ÔÚmongodb¹ÙÍøÏÂÔØ×îÐÂ°æ±¾
+2¡¢½âÑ¹£ºtar -zxvf mongodb-linux-x86_64-amazon-3.4.2.tgz 
+3¡¢È·¶¨	/usr/local/binÔÚPATHÖÐ£ºecho $PATH 
+4¡¢Îªmongod server´´½¨Á´½Ó£º sudo ln -s ~/mongodb-linux-x86_64-amazon-3.4.2/bin/mongod /usr/local/sbin/mongod
+5¡¢Îªmongo shell´´½¨Á´½Ó£º sudo ln -s ~/mongodb-linux-x86_64-amazon-3.4.2/bin/mongo /usr/local/bin/mongo
+²é¿´°æ±¾ºÅ£ºmongo --version
+6¡¢Îªserver´´½¨Êý¾ÝÄ¿Â¼£ºmkdir ~/data
+			mkdir ~/data/db
+7¡¢ÔÚÒ»¸ö¶ÀÁ¢µÄÖÕ¶Ë¿ªÆôserver£ºmongod --dbpath ~/data/db/
+8¡¢ÔÚÒ»¸öÐÂÖÕ¶ËÆô¶¯mongo£ºmongo

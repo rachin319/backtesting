@@ -1,10 +1,10 @@
-1¡¢ÔÚmongodb¹ÙÍøÏÂÔØ×îÐÂ°æ±¾
-2¡¢½âÑ¹£ºtar -zxvf mongodb-linux-x86_64-amazon-3.4.2.tgz 
-3¡¢È·¶¨	/usr/local/binÔÚPATHÖÐ£ºecho $PATH 
-4¡¢Îªmongod server´´½¨Á´½Ó£º sudo ln -s ~/mongodb-linux-x86_64-amazon-3.4.2/bin/mongod /usr/local/sbin/mongod
-5¡¢Îªmongo shell´´½¨Á´½Ó£º sudo ln -s ~/mongodb-linux-x86_64-amazon-3.4.2/bin/mongo /usr/local/bin/mongo
-²é¿´°æ±¾ºÅ£ºmongo --version
-6¡¢Îªserver´´½¨Êý¾ÝÄ¿Â¼£ºmkdir ~/data
+1、在mongodb官网下载最新版本
+2、解压：tar -zxvf mongodb-linux-x86_64-amazon-3.4.2.tgz 
+3、确定	/usr/local/bin在PATH中：echo $PATH 
+4、为mongod server创建链接： sudo ln -s ~/mongodb-linux-x86_64-amazon-3.4.2/bin/mongod /usr/local/sbin/mongod
+5、为mongo shell创建链接： sudo ln -s ~/mongodb-linux-x86_64-amazon-3.4.2/bin/mongo /usr/local/bin/mongo
+查看版本号：mongo --version
+6、为server创建数据目录：mkdir ~/data
 			mkdir ~/data/db
-7¡¢ÔÚÒ»¸ö¶ÀÁ¢µÄÖÕ¶Ë¿ªÆôserver£ºmongod --dbpath ~/data/db/
-8¡¢ÔÚÒ»¸öÐÂÖÕ¶ËÆô¶¯mongo£ºmongo
+7、在一个独立的终端开启server：mongod --dbpath ~/data/db/
+8、在一个新终端启动mongo：mongo

@@ -1,12 +1,6 @@
 # backtesting
 
-28 March, 2017
-
-进度：
-1、完成了数据插入，共101.904GB，最后有报错：
-pymongo.errors.OperationFailure: exception: Can't take a write lock while out of disk space
-2、为了检查错误原因安装了mongodb的可视化工具Robomongo，还未发现是否有错。
-
-计划：
-1、完成UI程序（回测）在Ubuntu及现有数据结构下的调整及运行；
-2、找出报错原因，如需要，对插入程序进行修改。
+30 March, 2017
+更新：
+1、将python3编写的backtesting脚本更改为在python2环境下可运行，共5个文件，执行python UI.py即可运行脚本；
+2、更新加载csv文件到数据库的程序，考虑backtesting脚本的运行效率，及服务器磁盘大小，减少部分不需要使用的条目。

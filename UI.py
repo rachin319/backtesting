@@ -59,8 +59,8 @@ class MainWindow(QMainWindow):
 		
 		self.run = QPushButton('Run', self)
 		self.run.clicked.connect(self.runMain)
-		self.setAgreementBtn = QPushButton('Setting', self)
-		self.setAgreementBtn.clicked.connect(self.setAgreement)
+		#self.setAgreementBtn = QPushButton('Setting', self)
+		#self.setAgreementBtn.clicked.connect(self.setAgreement)
 		
 		grid = QGridLayout()
 		#grid.setSpacing(10)
@@ -68,7 +68,7 @@ class MainWindow(QMainWindow):
 		grid.addWidget(self.agreement1Edit, 1, 1)
 		grid.addWidget(self.agreement2, 2, 0)
 		grid.addWidget(self.agreement2Edit, 2, 1)
-		grid.addWidget(self.setAgreementBtn, 2, 2)
+		#grid.addWidget(self.setAgreementBtn, 2, 2)
 		grid.addWidget(self.startTime, 3, 0)
 		grid.addWidget(self.startTimeEdit, 3, 1)
 		grid.addWidget(self.endTime, 4, 0)
@@ -124,6 +124,7 @@ class MainWindow(QMainWindow):
 		endTime = self.endTimeEdit.dateTime()
 		self.c1 = self.calculate1Edit.text()
 		self.c3 = self.calculate3Edit.text()
+		self.setAgreement()
 		self.stateEdit.append('Formula:'+self.c1+'*' + self.agreement1ID + self.calculate1 + self.c3 + '*' + self.agreement2ID)
 		data1, data2 = cleardata(self.dbNameInit, self.agreement1ID, self.agreement2ID, client, startTime, endTime)
 		f_data, max_v, min_v, avg = drawC3(data1, data2, float(self.c1), float(self.c3), self.calculate1)

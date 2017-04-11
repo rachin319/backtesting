@@ -1,13 +1,41 @@
 import sys
 import pymongo
-from time import time
+import time
 from datetime import datetime
 from PyQt4.QtGui import (QApplication, QLabel, QComboBox, QTextEdit, QDateTimeEdit, QGridLayout, QWidget, QLineEdit, QDesktopWidget, QAction, qApp, QMainWindow, QTableWidget, QTableWidgetItem, QHeaderView, QHBoxLayout, QPushButton)
 from PyQt4.QtGui import QIcon
 from PyQt4.QtCore import QDateTime
+from PyQt4.QtCore import QThread
+from PyQt4 import QtCore
 import threading
 from all_setting import catalog, dataEndDate, dataStartDate, dbName, agreement1, agreement2
 from test3 import cleardata, drawC3, show
+
+class WorkThread(QThread):
+	finishSignal = QtCore.pyqtSignal(list)
+	def __init__(self,agreement1ID, agreement2ID, startTime, endTime, c1, c3, calculate1):
+		QThread.__init__(self)
+		self.dbNameInit = 'test1'
+		self.agreement1ID=agreement1ID
+		self.agreement2ID=agreement2ID
+		self.startTime=startTime
+		self.endTime=endTime
+		self.c1=c1
+		self.c3=c3
+		self.calculate1=calculate1
+
+	def run(self):
+		host, port = 'localhost', 27017
+		client = pymongo.MongoClient(host, port)
+		data1, data2 = cleardata(self.dbNameInit, self.agreement1ID, self.agreement2ID, client, self.startTime, self.endTime)
+		f_data, max_v, min_v, avg = drawC3(data1, data2, float(self.c1), float(self.c3), self.calculate1)
+		#self.stateEdit.append(u'Maximum:%f' % max_v)
+		#self.stateEdit.append(u'Minimum:%f' % min_v)
+		#self.stateEdit.append(u'Average:%f' % avg)
+		#show(f_data)
+		self.finishSignal.emit([f_data, max_v, min_v, avg])
+
+
 class MainWindow(QMainWindow):
 	def __init__(self):
 		super(MainWindow,self).__init__()
@@ -103,8 +131,17 @@ class MainWindow(QMainWindow):
 		cp = QDesktopWidget().availableGeometry().center()
 		qr.moveCenter(cp)
 		self.move(qr.topLeft())
-		
-	def setAgreement(self):
+
+	def done(self,ls):
+		self.stateEdit.append(u'Maximum:%f' % ls[1])
+		self.stateEdit.append(u'Minimum:%f' % ls[2])
+		self.stateEdit.append(u'Average:%f' % ls[3])
+		show(ls[0])
+		self.run.setEnabled(True)
+		self.stateEdit.append('End time: %s' % time.ctime())
+
+	def runMain(self):
+		self.run.setEnabled(False)
 		agreementt1 = self.agreement1Edit.text()
 		agreementt2 = self.agreement2Edit.text()
 		if agreementt1 == '':
@@ -114,25 +151,16 @@ class MainWindow(QMainWindow):
 		else:
 			self.agreement1ID = agreementt1
 			self.agreement2ID = agreementt2
-			self.stateEdit.append('Contract1:' + self.agreement1ID + ' Contract2:' + self.agreement2ID + '  have set')
-	
-			
-	def runMain(self):
-		host, port = 'localhost', 27017
-		client = pymongo.MongoClient(host, port)
 		startTime = self.startTimeEdit.dateTime()
 		endTime = self.endTimeEdit.dateTime()
 		self.c1 = self.calculate1Edit.text()
 		self.c3 = self.calculate3Edit.text()
-		self.setAgreement()
-		self.stateEdit.append('Formula:'+self.c1+'*' + self.agreement1ID + self.calculate1 + self.c3 + '*' + self.agreement2ID)
-		data1, data2 = cleardata(self.dbNameInit, self.agreement1ID, self.agreement2ID, client, startTime, endTime)
-		f_data, max_v, min_v, avg = drawC3(data1, data2, float(self.c1), float(self.c3), self.calculate1)
-		self.stateEdit.append(u'Maximum:%f' % max_v)
-		self.stateEdit.append(u'Minimum:%f' % min_v)
-		self.stateEdit.append(u'Average:%f' % avg)
-		show(f_data)
-		
+		self.stateEdit.append('Formula: '+self.c1+'*' + self.agreement1ID + self.calculate1 + self.c3 + '*' + self.agreement2ID + ' have set')
+		self.stateEdit.append('Start time: %s' % time.ctime())
+		self.workThread=WorkThread(self.agreement1ID,self.agreement2ID,startTime, endTime, self.c1, self.c3, self.calculate1)
+		self.workThread.finishSignal.connect(self.done)
+		self.workThread.start()
+
 if __name__ == '__main__':
 	app = QApplication(sys.argv)
 	ex = MainWindow()

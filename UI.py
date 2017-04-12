@@ -87,6 +87,8 @@ class MainWindow(QMainWindow):
 		
 		self.run = QPushButton('Run', self)
 		self.run.clicked.connect(self.runMain)
+		self.clearEdit = QPushButton('Clear', self)
+		self.clearEdit.clicked.connect(self.clearEdition)
 		#self.setAgreementBtn = QPushButton('Setting', self)
 		#self.setAgreementBtn.clicked.connect(self.setAgreement)
 		
@@ -109,11 +111,15 @@ class MainWindow(QMainWindow):
 		grid.addWidget(self.calculate3Edit, 5, 5)
 		grid.addWidget(self.stateEdit, 6, 1, 1, 5)
 		grid.addWidget(self.run, 7, 1)
+		grid.addWidget(self.clearEdit, 7, 2)
 		gridWidget = QWidget()
 		gridWidget.setLayout(grid)
 		self.agreement11.move(200, 100)
 		self.setCentralWidget(gridWidget)
 		self.show()
+	
+	def clearEdition(self):
+		self.stateEdit.clear()
 		
 	def onActivated(self, text):
 		self.calculate1 = text
@@ -155,7 +161,8 @@ class MainWindow(QMainWindow):
 		endTime = self.endTimeEdit.dateTime()
 		self.c1 = self.calculate1Edit.text()
 		self.c3 = self.calculate3Edit.text()
-		self.stateEdit.append('Formula: '+self.c1+'*' + self.agreement1ID + self.calculate1 + self.c3 + '*' + self.agreement2ID + ' have set')
+		self.stateEdit.append('Formula:'+self.c1+'*' + self.agreement1ID + self.calculate1 + self.c3 + '*' + self.agreement2ID)
+		self.stateEdit.append('Contract1:' + self.agreement1ID + ' Contract2:' + self.agreement2ID + '  have set')
 		self.stateEdit.append('Start time: %s' % time.ctime())
 		self.workThread=WorkThread(self.agreement1ID,self.agreement2ID,startTime, endTime, self.c1, self.c3, self.calculate1)
 		self.workThread.finishSignal.connect(self.done)

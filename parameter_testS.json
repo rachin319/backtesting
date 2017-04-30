@@ -1,0 +1,22 @@
+{
+    "PriceCoe": 1, 
+    "buyPrice": [
+        3200, 
+        3300, 
+        3500, 
+        3600
+    ], 
+    "closeFirst": false, 
+    "direction": "short", 
+    "isFilter": false, 
+    "isStop": true, 
+    "maxStpLos": 0, 
+    "openUnit": 1, 
+    "postoday": {
+        "rb1710": 3
+    }, 
+    "receivers": [], 
+    "slippage": 5, 
+    "stoptime": "9999", 
+    "stpProfit": 2
+}

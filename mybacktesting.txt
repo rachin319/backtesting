@@ -1,0 +1,38 @@
+﻿from ctaBacktesting import *
+
+from strategyGirdTrading import *
+
+engine = BacktestingEngine()
+
+engine.setBacktestingMode(engine.TICK_MODE)
+
+engine.setStartDate('20160401')
+
+engine.loadHistoryData('backtesting', 'AG01')    #在此处修改合约名
+
+engine.initStrategy(strategyGirdTrading, {"className": "theGirdTrading", "name": "testS", "vtSymbol": "rb1710"})
+
+engine.runBacktesting()
+
+engine.showBacktestingResult()
+
+
+
+from ctaBacktesting import *
+
+from ctaTradeTest import *
+
+engine = BacktestingEngine()
+
+engine.setBacktestingMode(engine.TICK_MODE)
+
+engine.setStartDate('20160401')
+
+engine.loadHistoryData2('backtesting', 'AG05', 'AG01') 
+
+engine.initStrategy(tradeTest,{"className": "tradeTest", "longSymbol": "AG05", "name": "testD", "vtSymbol": "AG05,AG01", "shortSymbol": "AG01"})
+
+engine.runBacktesting()
+
+engine.showBacktestingResult()
+

@@ -98,9 +98,12 @@ class BacktestingEngine(object):
         host, port = loadMongoSetting()
         
         self.dbClient = pymongo.MongoClient(host, port)
-        collection = self.dbClient[dbName][symbol]          
-
-        self.output(u'开始载入数据')
+	#if type(symbol) is not list:
+        collection = self.dbClient[dbName][symbol]  
+     	#else:
+	#    collection = self.dbClient[dbName][symbol[0]]
+	#    collection.insert(self.dbClient[dbName][symbol[1]]
+	self.output(u'开始载入数据')
       
         # 首先根据回测模式，确认要使用的数据类
         if self.mode == self.BAR_MODE:
@@ -130,6 +133,59 @@ class BacktestingEngine(object):
         self.dbCursor = collection.find(flt)
         
         self.output(u'载入完成，数据量：%s' %(initCursor.count() + self.dbCursor.count()))
+
+    def loadHistoryData2(self, dbName, symbol1, symbol2):
+        """载入历史数据"""
+        host, port = loadMongoSetting()
+        
+        self.dbClient = pymongo.MongoClient(host, port)
+        collection1 = self.dbClient[dbName][symbol1]
+	collection2 = self.dbClient[dbName][symbol2]        
+
+        self.output(u'开始载入数据')
+      
+        # 首先根据回测模式，确认要使用的数据类
+        if self.mode == self.BAR_MODE:
+            dataClass = CtaBarData
+            func = self.newBar
+        else:
+            dataClass = CtaTickData
+            func = self.newTick
+
+        # 载入初始化需要用的数据
+        flt = {'datetime':{'$gte':self.dataStartDate,
+                           '$lt':self.strategyStartDate}}        
+        initCursor1 = collection1.find(flt)
+	initCursor2 = collection2.find(flt)
+        
+        # 将数据从查询指针中读取出，并生成列表
+        for d in initCursor1:
+            data = dataClass()
+            data.__dict__ = d
+            self.initData.append(data)
+	for d in initCursor2:
+            data = dataClass()
+            data.__dict__ = d
+            self.initData.append(data)
+  
+        
+        # 载入回测数据
+        if not self.dataEndDate:
+            flt = {'datetime':{'$gte':self.strategyStartDate}}   # 数据过滤条件
+        else:
+            flt = {'datetime':{'$gte':self.strategyStartDate,
+                               '$lte':self.dataEndDate}}  
+        dbCursor1 = collection1.find(flt)
+        dbCursor2 = collection2.find(flt)
+	self.dbCursor = []
+	for d in dbCursor1:
+	    self.dbCursor.append(d)
+	for d in dbCursor2:
+	    self.dbCursor.append(d)
+	
+        self.output(u'载入完成，数据量：%s' %(initCursor1.count() + initCursor2.count() + len(self.dbCursor)))
+
+
         
     #----------------------------------------------------------------------
     def runBacktesting(self):

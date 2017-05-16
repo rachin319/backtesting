@@ -1,0 +1,23 @@
+{
+    "buyPrice": [
+	3200,
+	3300,
+	3400,
+	3500,
+	3600
+    ], 
+    "closeFirst": true, 
+    "isFilter": false, 
+    "longBuyUnit": 1, 
+    "longPriceCoe": 1, 
+    "postoday": {
+        "AG05": 2, 
+        "AG01": 2
+    }, 
+    "receivers": [], 
+    "shortBuyUnit": 1, 
+    "shortPriceCoe": 1, 
+    "slippage": 5, 
+    "stoptime": "9999", 
+    "stpProfit": 2
+}
